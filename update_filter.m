@@ -1,0 +1,72 @@
+function [ filter ] = update_filter( filter,e )
+
+x=filter.x_delayed;
+w_old = filter.w;
+R_old = filter.R;
+r=filter.r;
+re_old = filter.re;
+filter_type=filter.type;
+%
+%filter.w=w_old; %default output
+
+%% A1 scenario 1:f
+if strcmpi(filter_type,'SGD')
+    %implement the SGD update rule here
+    alpha=filter.adaptation_constant;
+    Rx =[2 -1; -1 2];
+    rex = [0;3];
+    filter.w= w_old+2*alpha*(rex- Rx*w_old);
+   
+end
+
+% %% A1 scenario 1:i
+% if strcmpi(filter_type,'Newton')
+%     %implement the Newton update rule here
+%     alpha=filter.adaptation_constant;
+%     Rx = 
+%     rex = 
+%     filter.w=
+% end
+% 
+%% A1 scenario 2:a
+if strcmpi(filter_type,'LMS')
+    %implement the LMS update rule here
+    alpha=filter.adaptation_constant;
+    filter.w= w_old + 2*alpha* x*r;
+end
+
+%% A1 scenario 2:b
+if strcmpi(filter_type,'NLMS')
+    %implement the NLMS update rule here
+    alpha=filter.adaptation_constant;
+    [n,d]= size(x);
+    filter.w= w_old + 2/(dot(x,x')/d)*alpha* x*r;
+end
+
+%% A1 scenario 2:d
+if strcmpi(filter_type,'RLS')
+    %implement the RLS update rule here
+    lambda=filter.adaptation_constant;
+    disp(size(filter.R))
+    disp(lambda)
+    lam= lambda.^(0:4);
+    x = x*lam;
+
+    down =x'*R_old*x + lambda;
+    up = R_old*x;
+    g=(up)/( down);
+    filter.R =lambda^(-2)*(R_old - g*x'*R_old);
+    filter.re = lambda^2* re_old + x*e;
+    filter.w= filter.R* filter.re;
+end
+
+% %% A1 scenario 2:e
+% if strcmpi(filter_type,'FDAF')
+%     %implement the FDAF update rule here
+%     alpha=filter.adaptation_constant;
+%     filter.w=
+% end
+% 
+
+end
+
