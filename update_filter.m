@@ -49,8 +49,8 @@ if strcmpi(filter_type,'RLS')
     lambda=filter.adaptation_constant;
     disp(size(filter.R))
     disp(lambda)
-    lam= lambda.^(0:4);
-    x = x*lam;
+%    lam= lambda.^(0:4);
+ %   x = x*lam;
 
     down =x'*R_old*x + lambda;
     up = R_old*x;
@@ -60,13 +60,25 @@ if strcmpi(filter_type,'RLS')
     filter.w= filter.R* filter.re;
 end
 
-% %% A1 scenario 2:e
-% if strcmpi(filter_type,'FDAF')
-%     %implement the FDAF update rule here
-%     alpha=filter.adaptation_constant;
-%     filter.w=
-% end
-% 
+ %% A1 scenario 2:e
+ if strcmpi(filter_type,'FDAF')
+    alpha = filter.adaptation_constant;
+    X = filter.F * x;
+    beta = 0.5;
+    filter.est_p = beta * filter.est_p + (1 - beta) * (X .* conj(X)')/length(x);
+    %convert back to frequency domain
+    W_old = filter.F_inverse * w_old;
+    
+    % Precompute diag_spectrum and inv_diag_spectrum
+    diag_spectrum = diag(filter.est_p);
+    inv_diag_spectrum = inv(diag(diag_spectrum));
+    
+    % Update w in frequency domain
+    W_new  = W_old + (2 * alpha) * inv_diag_spectrum * conj(X) * r;
+    %return to time domain
+    filter.w = filter.F * W_new;
 
+ end
+ 
 end
 

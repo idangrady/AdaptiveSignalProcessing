@@ -11,7 +11,12 @@ classdef adaptive_filter
         w_history = []; %keep track of filter coefficients as they evolve
         r;
         R=[];
-        re=[]
+        re=[];
+        F =[];
+        F_inverse=[];
+        state_history =[];
+        est_p =[];
+
         
         %add your own variables here
         
@@ -20,7 +25,7 @@ classdef adaptive_filter
     methods
         function obj = adaptive_filter(length,type,adaptation_constant)
             if(nargin>0)
-             disp(length)
+            disp(length)
             obj.length=length;
             obj.type=type;
             obj.adaptation_constant=adaptation_constant;
@@ -30,7 +35,9 @@ classdef adaptive_filter
             obj.w_history=zeros(0,length);
             obj.R=eye(length)*0.005;
             obj.re=zeros(length,1);
-
+            obj.F = dftmtx(length);
+            obj.F_inverse = conj(dftmtx(length))/length;
+            obj.est_p = ones(length, length);
             %initialize your variables here
             
             end

@@ -1,10 +1,9 @@
 clc;clear all;close all;
 %% generate x1 and x2
-nsample=2000;
+nsample=200;
 [x e]=generate_input(nsample);
-
 %% set up filter
-filterA1=adaptive_filter(5,'RLS', 1-10^(-4));
+filterA1=adaptive_filter(2,'FDAF', 0.01);
 
 %% perform nsample iterations
 for sample=1:nsample
