@@ -19,14 +19,13 @@ if strcmpi(filter_type,'SGD')
    
 end
 
-% %% A1 scenario 1:i
-% if strcmpi(filter_type,'Newton')
-%     %implement the Newton update rule here
-%     alpha=filter.adaptation_constant;
-%     Rx = 
-%     rex = 
-%     filter.w=
-% end
+ %% A1 scenario 1:i
+ if strcmpi(filter_type,'Newton')
+    alpha=filter.adaptation_constant;
+    Rx =[2 -1; -1 2];
+    rex = [0;3]; 
+    t=(rex-Rx*w_old);
+    filter.w= w_old + 2*alpha*Rx\(rex-Rx*w_old);
 % 
 %% A1 scenario 2:a
 if strcmpi(filter_type,'LMS')
