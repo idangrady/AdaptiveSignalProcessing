@@ -17,9 +17,7 @@ classdef adaptive_filter
         state_history =[];
         est_p =[];
 
-        
-        %add your own variables here
-        
+                
     end
     
     methods

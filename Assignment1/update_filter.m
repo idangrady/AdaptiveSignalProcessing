@@ -16,18 +16,16 @@ if strcmpi(filter_type,'SGD')
     Rx =[2 -1; -1 2];
     rex = [0;3];
     filter.w= w_old+2*alpha*(rex- Rx*w_old);
-   
 end
 
-% %% A1 scenario 1:i
-% if strcmpi(filter_type,'Newton')
-%     %implement the Newton update rule here
-%     alpha=filter.adaptation_constant;
-%     Rx = 
-%     rex = 
-%     filter.w=
-% end
-% 
+ %% A1 scenario 1:i
+ if strcmpi(filter_type,'Newton')
+    alpha=filter.adaptation_constant;
+    Rx =[2 -1; -1 2];
+    rex = [0;3]; 
+    t=(rex-Rx*w_old);
+    filter.w= w_old + 2*alpha*Rx\(rex-Rx*w_old);
+
 %% A1 scenario 2:a
 if strcmpi(filter_type,'LMS')
     %implement the LMS update rule here
@@ -49,8 +47,6 @@ if strcmpi(filter_type,'RLS')
     lambda=filter.adaptation_constant;
     disp(size(filter.R))
     disp(lambda)
-%    lam= lambda.^(0:4);
- %   x = x*lam;
 
     down =x'*R_old*x + lambda;
     up = R_old*x;
@@ -62,32 +58,21 @@ end
 
  %% A1 scenario 2:e
  if strcmpi(filter_type,'FDAF')
-    alpha=filter.adaptation_constant;
-    X = filter.F*x;
-    beta =0.5;
-    filter.est_p =beta*filter.est_p + (1-beta)*(X*conj(X)')/length(x);
-    W_old = filter.F_inverse*w_old;
-    %update w in frequency dimain
-    diag_ = diag(filter.est_p);
-    sss = eye(2);
-    ssa = diag(diag(filter.est_p));
+    alpha = filter.adaptation_constant;
+    X = filter.F * x;
+    beta = 0.5;
+    filter.est_p = beta * filter.est_p + (1 - beta) * (X .* conj(X)')/length(x);
+    %convert back to frequency domain
+    W_old = filter.F_inverse * w_old;
     
-    W_new = W_old+ (2*alpha)* inv(ssa)*conj(X)*r;
+    % Precompute diag_spectrum and inv_diag_spectrum
+    diag_spectrum = diag(filter.est_p);
+    inv_diag_spectrum = inv(diag(diag_spectrum));
     
-    filter.w = filter.F*W_new;
-
-     %implement the FDAF update rule here
-     %{
-     W_old = filter.F_inverse *w_old; % from time domain to frequency domain
-     update =inv(filter.est_p);
-     update2 =(conj(X_freq) * r);
-
-     scaling = (2* alpha);
-     
-     W_new = W_old + (scaling)*(update);
-     %return to time domain
-     filter.w = filter.F*W_new;
-     %}
+    % Update w in frequency domain
+    W_new  = W_old + (2 * alpha) * inv_diag_spectrum * conj(X) * r;
+    %return to time domain
+    filter.w = filter.F * W_new;
 
  end
  
