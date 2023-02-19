@@ -6,8 +6,6 @@ R_old = filter.R;
 r=filter.r;
 re_old = filter.re;
 filter_type=filter.type;
-%
-%filter.w=w_old; %default output
 
 %% A1 scenario 1:f
 if strcmpi(filter_type,'SGD')

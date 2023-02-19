@@ -15,9 +15,7 @@ classdef adaptive_filter
         F =[];
         F_inverse=[];
         state_history =[];
-        est_p =[];
-
-                
+        est_p =[];                
     end
     
     methods
