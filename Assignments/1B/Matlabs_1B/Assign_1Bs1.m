@@ -15,10 +15,10 @@ clc;
 %% Assign 1BS1 c)
 % 1. Setup the ULA settings as in figure 1 of the assignment
 
-J = 0;                  % Number of sensors
+J = 4;                  % Number of sensors
 dy = 0;                 % meters of element spacing in y-direction
-dx = 0;                 % meters of element spacing in x-direction
-nb_f = 0;               % narrowband (nb) frequency in Hz
+dx = 3.4;                 % meters of element spacing in x-direction
+nb_f = 2500;               % narrowband (nb) frequency in Hz
 
 % Setup an ULA array from the settings and plot the array configuration
 my_array = arrays.ULA(J,dx,dy);
@@ -35,7 +35,7 @@ set(b, 'angles',        -180:1:180);
 set(b, 'nb_frequency',  nb_f);
 
 % Display all properties of the beamformer b:
-b
+%b
 
 % 2. Implement the array_response_vector.m method that is located in the
 %    @beamformer folder.
@@ -46,7 +46,7 @@ b
 % Set the beamformer weights to 1
 b.nb_weights = ones(J,1);
 b.calc_nb_beampattern;
-
+plot( b.nb_beampattern, (size(b.nb_beampattern)));
 % Use the plot function that belongs to the narrowband beamformer
 figure;
 subplot(1,2,1);b.plot_nb;
@@ -62,7 +62,7 @@ title('Beampattern for narrowband beamformer (reference)')
 % 2. Verify the result of the matlab function by visual inspection.
 
 % Remove this return to continue with the assignment
-return;
+%return;
 
 theta = []; % row vector containing angles for which constraints hold
 target = []; % row vector containing target values for the beampattern

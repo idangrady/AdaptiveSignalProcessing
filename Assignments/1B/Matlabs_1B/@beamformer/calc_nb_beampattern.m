@@ -10,7 +10,9 @@ function calc_nb_beampattern(b)
 % function: b.array_response_vector(theta, f)
 %
 % Store the resulting beampattern in b.nb_beampattern.
-
-b.nb_beampattern = ...;
+J=4;
+ARResponce=b.array_response_vector(b.angles,b.nb_frequency);
+%aaa = abs(aa*asas);
+b.nb_beampattern = (1/J^2).*abs(transpose(b.nb_weights)*transpose(ARResponce)).^2;
 end
 

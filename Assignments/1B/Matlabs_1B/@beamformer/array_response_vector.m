@@ -23,8 +23,9 @@ p = ULA_array.sensor_positions;
 % help wave_vector
 
 % Implement this yourself
-
-A=..;
-
+v= wave_vector(theta);
+lambda= 340/f;
+thai=(v'*p')/340;
+A= exp(-1i*2*pi*f*thai);
 end
 
