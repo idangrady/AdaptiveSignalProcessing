@@ -10,6 +10,12 @@ function sa = rectangular_array(J, dx, dy )
 
 %p = [px, py];
 
+p = zeros(J,2);
+for i = 1:J
+    for j = 1:2
+        p((i-1)*J+j,:) = [(i-1)*dx, (j-1)*dy];
+    end
+end
 % Generate the rectangular array with sensor positions p
 sa = array(p, 'Rectangular array');
 end

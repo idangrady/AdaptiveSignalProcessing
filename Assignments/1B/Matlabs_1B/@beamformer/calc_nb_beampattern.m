@@ -13,6 +13,8 @@ function calc_nb_beampattern(b)
 J=4;
 ARResponce=b.array_response_vector(b.angles,b.nb_frequency);
 %aaa = abs(aa*asas);
-b.nb_beampattern = (1/J^2).*abs(transpose(b.nb_weights)*transpose(ARResponce)).^2;
+%aaa= (1/J^2).*abs(transpose(b.nb_weights)*transpose(ARResponce)).^2;
+
+b.nb_beampattern = (1/J^2).*abs(b.nb_weights'*ARResponce).^2;
 end
 
