@@ -15,7 +15,7 @@ clc;
 %% Assign 1BS1 c)
 % 1. Setup the ULA settings as in figure 1 of the assignment
 
-J = 6;                  % Number of sensors
+J = 4;                  % Number of sensors
 dy = 0;                 % meters of element spacing in y-direction
 dx = 0.034;                 % meters of element spacing in x-direction
 nb_f = 2500;               % narrowband (nb) frequency in Hz
@@ -23,7 +23,7 @@ dy_g = 0.017;
 
 % Setup an ULA array from the settings and plot the array configuration
 my_array = arrays.ULA(J,dx,dy);
-my_array_ref = arrays.ULA(J,dx,dy);
+my_array_ref = arrays.ULA(J/2,dx,dy);
 my_array_g = arrays.rectangular_array(J/2,dx,dy_g);
 
 % Use the plot function that belongs to the array class (in @array
@@ -78,8 +78,8 @@ title('Beampattern for narrowband beamformer (reference)')
 
 % Remove this return to continue with the assignment
 
-theta = [30]; % row vector containing angles for which constraints hold
-target = [1]; % row vector containing target values for the beampattern
+theta = [30 ]; % row vector containing angles for which constraints hold
+target = [1 ]; % row vector containing target values for the beampattern
 b.beam_steering_nb(theta, target);
 b.calc_nb_beampattern;
 
@@ -99,9 +99,9 @@ b_ref.plot_nb([],theta, {'k-.','LineWidth',2});
 % has unity response at 30 degrees and a zero response at -60 degrees.
 
 % Remove this return to continue with the assignment
-theta = [30 -60]; % row vector containing angles for which constraints hold
+thetaConstraint = [30 -60]; % row vector containing angles for which constraints hold
 target = [1 0]; % row vector containing target values for the beampattern
-b.beam_steering_nb(theta, target);
+b.beam_steering_nb(thetaConstraint, target);
 b.calc_nb_beampattern;
 
 % Use the plot function that belongs to the narrowband beamformer
@@ -115,7 +115,34 @@ figure;
 
 b_g = b;
 b_g.array.sensor_positions = my_array_g.sensor_positions;
+b_g.beam_steering_nb(thetaConstraint, target);
 b_g.calc_nb_beampattern;
+b_g.plot_nb([],thetaConstraint, {'k-.','LineWidth',2});
+
+% fd  =1kHz, 
+nb_f_1 = 1000;               
+b_g1 = b_g;
+b_g1.nb_frequency =nb_f_1;
+%b_g1.array.sensor_positions = my_array_g.sensor_positions;
+%b_g1.beam_steering_nb(theta, target);
+b_g1.calc_nb_beampattern;
+
+figure;
+b_g1.plot_nb([],thetaConstraint, {'k-.','LineWidth',2});
+
+% nb_f_4  =4kHz, 
+nb_f_4 = 4000;  
+
+figure;
+b_g4 = b_g;
+b_g4.nb_frequency =nb_f_4;
+%b_g4.array.sensor_positions = my_array_g.sensor_positions;
+%b_g4.beam_steering_nb(theta, target);
+%b_g4.nb_weights = b.nb_weights;
+b_g4.calc_nb_beampattern;
+b_g4.plot_nb([],thetaConstraint, {'l-.','LineWidth',2});
+
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -123,6 +150,7 @@ b_g.calc_nb_beampattern;
 % 1. Compare the square array results for different frequencies
 
 
+b_g.plot_nb([],theta, {'k-.','LineWidth',2});
 
 
 

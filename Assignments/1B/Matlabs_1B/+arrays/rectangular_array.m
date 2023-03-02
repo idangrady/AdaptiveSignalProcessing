@@ -10,9 +10,9 @@ function sa = rectangular_array(J, dx, dy )
 
 %p = [px, py];
 
-p = zeros(J,2);
+p = zeros(J,J);
 for i = 1:J
-    for j = 1:2
+    for j = 1:J
         p((i-1)*J+j,:) = [(i-1)*dx, (j-1)*dy];
     end
 end

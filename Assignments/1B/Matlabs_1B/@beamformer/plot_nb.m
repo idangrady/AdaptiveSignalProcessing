@@ -39,7 +39,7 @@ end
 
 %% Plot DOAs as lines with linspec_DOA line options
 holdstate = ishold;
-
+%{
 hold on;
 DOA = reshape(DOA, 1, length(DOA));
 plot([DOA; DOA], [min(B.*(1-isinf(B))) max(B)]'* ones(1,length(DOA)), linspec_DOA{:});
@@ -50,6 +50,6 @@ if holdstate
 else
   hold off;
 end
-
+%}
 end % plot_nb
 
