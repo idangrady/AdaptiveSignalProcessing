@@ -53,6 +53,10 @@ set(b_ref, 'nb_frequency',  nb_f);
 % 3. Implement the calc_nb_beampattern.m method that is located in the
 %    @beamformer folder
 % 4. Verify the result of the matlab function with your answer at a)
+lambda= 340/nb_f;
+theta_ref = -180:180;
+B = (1/J^2).*abs((sind(J*pi*sind(theta_ref)*(dx/lambda)))/(sind(pi*sin(theta_ref)*(dx/lambda))))^2;
+% Set the beamformer weights to 1
 
 % Set the beamformer weights to 1
 b.nb_weights = ones(J,1);
