@@ -6,7 +6,7 @@ classdef beamformer < handle & hgsetget
     array;              % Contains a description and sensor positions
     angles;             % Angles for which a plot is made
     % Narrowband properties
-    nb_beampattern      % Narrowband beampattern
+    nb_beampattern;      % Narrowband beampattern
     nb_frequency;       % Frequency for narrowband beamformers
     nb_weights;         % Weights for narrowband beamformer
     % Multi-tone properties

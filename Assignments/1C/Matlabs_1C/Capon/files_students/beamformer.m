@@ -7,7 +7,7 @@ function beamformed_data = beamformer(dataset, scan, pw_indices, adaptive)
     beamformed_channel_data = zeros(dataset.N_ax*dataset.N_el, length(pw_indices));
 
     tic 
-    
+    sum_ = 0;
     for pw=1:length(pw_indices) %for every selected plane wave     
 
         %% Time-Of-Flight correction
@@ -25,7 +25,7 @@ function beamformed_data = beamformer(dataset, scan, pw_indices, adaptive)
     
         for i = 1:(2048*128)
             warning('off','MATLAB:singularMatrix');
-            
+           
             y = tof_data(i,:);
             
             N = length(y);
@@ -33,23 +33,34 @@ function beamformed_data = beamformer(dataset, scan, pw_indices, adaptive)
             
             a = ones(L,1);
             
-            if adaptive
+            switch adaptive
+                case 1
 				% Code your adaptive capon estimator for the weights w here
                 w = ones(N,1); 
 				
-                beamformed_channel_data(i, pw) = w'*y'
+                beamformed_channel_data(i, pw) = w'*y';
                 
-            else
+                case 0
                 w = ones(N,1);
                 beamformed_channel_data(i, pw) = w'*y';
                 
-            end
+                case 2 
+                    range = N-L;
+                    for batch =1:range
+                      cur_y = y(batch:batch+L-1);
+                      R_x =  (1/(N-L))* (cur_y'*cur_y)+eye(L)*0.001;
+                      W_cur = (inv(R_x)*a)/(a'*inv(R_x)*a); 
+                      z(batch) =(1/(N-L))*W_cur'*transpose(cur_y);
+                    end
+                  beamformed_channel_data(i, pw) = z(batch);
 
-            
-                      
+            end
+                        
         end
           
     end
+       aa =sum_
+
     
     time = toc; 
     

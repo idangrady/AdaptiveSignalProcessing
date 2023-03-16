@@ -36,11 +36,13 @@ scan.z = linspace(scan_size(2,1),scan_size(2,2), dataset.N_ax)';
 %% Beamforming
 pw_indices = 38; % 1:75 to use all PW's 
 % 
-% adaptive = 0;
-% beamformed_data = beamformer(dataset, scan, pw_indices, adaptive);
+adaptive = 0;
+beamformed_data = beamformer(dataset, scan, pw_indices, adaptive);
 
-adaptive = 1;
+adaptive = 2;
 beamformed_data_mv = beamformer(dataset, scan, pw_indices, adaptive);
+
+
 
 %% Envelope detection and logarithmic compression
 env_data = abs(hilbert(beamformed_data));
@@ -48,6 +50,10 @@ image = 20*log10(env_data./max(env_data(:)));
 
 env_data_mv = abs(hilbert(beamformed_data_mv));
 image_mv = 20*log10(env_data_mv./max(env_data_mv(:)));
+
+
+
+
 
 %% Visualize data
 figure();
