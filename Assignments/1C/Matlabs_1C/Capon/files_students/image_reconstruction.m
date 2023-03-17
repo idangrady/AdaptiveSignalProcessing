@@ -39,10 +39,8 @@ pw_indices = 38; % 1:75 to use all PW's
 adaptive = 0;
 beamformed_data = beamformer(dataset, scan, pw_indices, adaptive);
 
-adaptive = 2;
+adaptive = 1;
 beamformed_data_mv = beamformer(dataset, scan, pw_indices, adaptive);
-
-
 
 %% Envelope detection and logarithmic compression
 env_data = abs(hilbert(beamformed_data));
