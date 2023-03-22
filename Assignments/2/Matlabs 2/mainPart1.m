@@ -4,15 +4,17 @@ clc;
 
 %% Question 3 
 % Generate signal
-x = ...
-y = ...
 
-lambdas = [0.1,1,3]
+x = [[1:5]/5 zeros(1,128-5)];
+x = x(randperm(128));
+y = x + 0.05 *randn(128);
+
+lambdas = [0.1,1,3];
 for i = 1:length(lambdas)
     subplot(1,3,i)
     stem(y,'filled');
     hold on
-    x_hat = ...;
+    x_hat = 1/(1+lambdas(i))*y;
     stem(x_hat, 'filled');
     legend('$y$', '$\hat{x}$','Interpreter','latex')
     grid on;
@@ -46,7 +48,7 @@ title('Soft-thresholding complex values for lambda = 2')
 legend('x', 'soft\_thr(x)', 'Location', 'northwest')
 
 %% Question 6: Soft-thresholding on signal y
-
+%{
 lambdas = [0.01, 0.05, 0.1, 0.2]
 for i = 1:length(lambdas)
     subplot(1,4,i)
@@ -58,6 +60,7 @@ for i = 1:length(lambdas)
     grid on;
     title(sprintf('Estimate of x for lambda = %.1d',lambdas(i)))
 end
+
 
 %% Question 10: Uniform subsampling
 y = x;
@@ -174,5 +177,5 @@ for i = 1:length(lambdas)
     grid on;
 end
 sgtitle('ISTA random undersampling')
-
+%}
 
