@@ -68,9 +68,9 @@ end
 
 
 
-%{
-%% Question 10: Uniform subsampling
 
+%% Question 10: Uniform subsampling
+num_semp = 32;
 take_every = length(x)/num_semp;
 A =zeros(num_semp, length(x));
 %y = x;
@@ -85,7 +85,7 @@ for i=1:num_semp
 end
 % Uniform subsampling matrix 
 Au = A;
-
+%{
 % Use .' to transpose X if needed for matrix multiplication.
 % Since X contains complex numbers, if you'd just apply ' (non-element-wise
 % transpose), you calculate the complex conjugate. 
@@ -107,14 +107,12 @@ legend('original signal x', 'reconstructed signal $\hat{x_u}$', 'Interpreter', '
 ylim([-0.1, 1.3])
 grid on;
 
-%}
+
 
 %% Question 11: Random subsampling
 % Find random sampling matrix Ar
-num_semp = 32;
-X = fft(transpose(x));
-random_sampled =randperm(length(X),num_semp);
-A = zeros(num_semp,length(X));
+random_sampled =randperm(length(x),num_semp);
+
 for i=1:num_semp
     if(i==1)
          A(i,i) =1;
@@ -123,9 +121,6 @@ for i=1:num_semp
     end 
 end
 Ar = A;
-Xr = transpose(Ar)*Ar*X; 
-
-%{
 % Zero-filled subsampled X
 Xr = transpose(Ar)*Ar*X; 
 
@@ -150,13 +145,12 @@ lambdas = [0.001, 0.01, 0.1];
 
 for i = 1:length(lambdas)
     %Use the plotting for debugging purposes
-    %{ 
-    figure()
-     subplot(2,1,1)
-     stem(x)
-     title('original x')
-    %}
-    x_hat_pocs = pocs(X, A, lambdas(i), eps);
+%     figure()
+%     subplot(2,1,1)
+%     stem(x)
+%     title('original x')
+
+    x_hat_pocs = pocs(X, A, lambdas[i], eps);
     
     % Save the result for this lambda
     x_hat_pocs_res(i,:) = x_hat_pocs;
