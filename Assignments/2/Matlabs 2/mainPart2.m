@@ -5,16 +5,27 @@ clc;
 %% Question 17: Create sampling matrix
 
 M = 1024;
-A = ...
+num_semp = 100;
+random_sampled =randperm(M,num_semp);
+A = zeros(num_semp,M);
+for i=1:num_semp
+    if(i==1)
+         A(i,i) =1;
+    else
+        A(i,random_sampled(i)) =1;
+    end 
+end
+
+%A = 
     
 
 %% Question 18: IFFT reconstruction
 % Subsample the image
 im = phantom('Modified Shepp-Logan', 64);
-y = ...;
+y = A*im;
 
 % Reconstruction via inverse fourier transform
-invReconstruction = ... ;
+invReconstruction = 0;
 
 figure()
 subplot(1,3,1)
@@ -24,7 +35,7 @@ subplot(1,3,2)
 imshow(invReconstruction, [])
 title(sprintf('IFFT of zero-filled \nsubsampled k-space'))
 
-
+%{
 %% Question 19: TV based reconstruction 
 N = 64; % x and y dimension of the image
 F = ...;
@@ -85,4 +96,4 @@ subplot(1,3,3)
 imshow(TVreconMRI)
 title('TV reconstruction')
 
-
+%}

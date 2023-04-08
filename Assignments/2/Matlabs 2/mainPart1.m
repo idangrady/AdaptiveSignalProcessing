@@ -141,7 +141,7 @@ title('Reconstruction from random undersampling')
 legend('original signal x', 'undersampled signal $\hat{x_r}$', 'Interpreter', 'Latex')
 ylim([-0.1, 1.3])
 grid on;
-%}
+
 %% Question 12: POCS
 
 eps = 1e-10;
@@ -176,11 +176,11 @@ for i = 1:length(lambdas)
     grid on;
 end
 sgtitle('POCS random undersampling')
-%{
+%}
 %% Question 13: ISTA
 
 beta = 1e-2;
-eps = 1e-10;
+eps = 1e-25;
 x_hat_ista_res = zeros(3,length(x));
 lambdas = [1e-5, 1e-4, 1e-3];
 for i = 1:length(lambdas)
@@ -189,7 +189,7 @@ for i = 1:length(lambdas)
 %     subplot(2,1,1)
 %     stem(x)
 %     title('original x')
-    x_hat_ista = ISTA(...);
+    x_hat_ista = ISTA(X,A, lambdas(i), beta, eps);
     
     % Save the result for this lambda
     x_hat_ista_res(i,:) = x_hat_ista;
@@ -210,5 +210,5 @@ for i = 1:length(lambdas)
     grid on;
 end
 sgtitle('ISTA random undersampling')
-%}
+
 
