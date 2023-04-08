@@ -180,7 +180,7 @@ sgtitle('POCS random undersampling')
 %% Question 13: ISTA
 
 beta = 1e-2;
-eps = 1e-25;
+eps = 1e-20;
 x_hat_ista_res = zeros(3,length(x));
 lambdas = [1e-5, 1e-4, 1e-3];
 for i = 1:length(lambdas)
@@ -189,7 +189,7 @@ for i = 1:length(lambdas)
 %     subplot(2,1,1)
 %     stem(x)
 %     title('original x')
-    x_hat_ista = ISTA(X,A, lambdas(i), beta, eps);
+    x_hat_ista = ISTA(fft(transpose(x)),A, lambdas(i), beta, eps);
     
     % Save the result for this lambda
     x_hat_ista_res(i,:) = x_hat_ista;

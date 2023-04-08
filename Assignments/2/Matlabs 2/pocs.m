@@ -4,11 +4,10 @@ function [x_hat_new] = pocs(X, A, lambda, eps)
 X0 = transpose(A)*A*X;
 % Initialize
 i = 0;
-x_hat_new = 0;%zeros( length(X0),1);
-x_hat_prev = 0;%zeros(length(X0), 1);
+x_hat_new = 0;
+x_hat_prev = 0;
 X_new = X0;
 while (i == 0 || norm((x_hat_prev-x_hat_new))>eps)
-
         % calculate the inverse Furier Transform
         x_hat_prev =x_hat_new;
         % Soft-thresholding
@@ -22,12 +21,13 @@ while (i == 0 || norm((x_hat_prev-x_hat_new))>eps)
         end
         i = i+1;
 
+    end
+end
+
+
         % Use this plot for debugging, but comment it out if you want quicker
         % running.
      %    subplot(2,1,2)
       %   stem(x_hat_new)
        %  title('x_{hat}')
        %  pause(.1)
-    end
-end
-
