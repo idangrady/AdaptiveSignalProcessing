@@ -5,52 +5,81 @@ clc;
 %% Question 17: Create sampling matrix
 
 M = 1024;
-num_semp = 100;
-random_sampled =randperm(M,num_semp);
-A = zeros(num_semp,M);
-for i=1:num_semp
-    if(i==1)
-         A(i,i) =1;
-    else
-        A(i,random_sampled(i)) =1;
-    end 
-end
-
-%A = 
+A = reshape(randn(1, M*64^2), [M, 64^2]);
     
 
 %% Question 18: IFFT reconstruction
 % Subsample the image
 im = phantom('Modified Shepp-Logan', 64);
-y = A*im;
-
-% Reconstruction via inverse fourier transform
-invReconstruction = 0;
-
+im_vec=im(:);
+% testfft2=fft2(im);
+FF=dftmtx(64);
+FFF=dftmtx(64*64);
+tests22= FF*im*FF;
+% finalTest= FFF*im_vec*FFF
+s=fft(im_vec);
+y =A'*A*fft(im_vec) ;
+y_2d= reshape(y,[64 64]);
+% % Reconstruction via inverse fourier transform
+invReconstruction = ifft2(y_2d) ;
+% % 
 figure()
 subplot(1,3,1)
 imshow(im, [])
 title('Original image')
 subplot(1,3,2)
-imshow(invReconstruction, [])
+imshow(invReconstruction', [])
 title(sprintf('IFFT of zero-filled \nsubsampled k-space'))
 
-%{
+%% installin cvx
+
+addpath(genpath('C:\Users\yooso\course\cvx'));
+% cvx_setup
+run('C:\Users\yooso\course\cvx\cvx_setup.m');
 %% Question 19: TV based reconstruction 
 N = 64; % x and y dimension of the image
-F = ...;
+% F = ...;
+% 
+% lambda = 0.1;
+% 
+% cvx_begin
+%     cvx_precision low
+%     variable imhat(N,N)
+%     Dx_imhat = ...;
+%     Dy_imhat = ...;
+%     minimize( + lambda * (norm(Dx_imhat(:),1) + norm(Dy_imhat(:),1)) );
+% cvx_end
+% 
+% TVreconPhantom = imhat;
+ttt=diff(im);
+B = [ttt; zeros(1,64)];
+CC=im(:,2:end) - im(:,1:end-1);
+twt=diff(im,1,2);
+subplot(1,2,1)
+% 
+imshow(twt)
+subplot(1,2,2)
+imshow(CC)
+%%
+F = dftmtx(N); % Create the DFT matrix
 
 lambda = 0.1;
-
+% FIF=F*im*F;
+% AAA=A.'*A*(F*im*F)(:);
 cvx_begin
     cvx_precision low
-    variable imhat(N,N)
-    Dx_imhat = ...;
-    Dy_imhat = ...;
-    minimize(... + lambda * (norm(Dx_imhat(:),1) + norm(Dy_imhat(:),1)) );
-cvx_end
+    variable imhat(N,N) 
+    Dx_imhat = imhat(:,2:end) - imhat(:,1:end-1);
+    Dx_imhat= [Dx_imhat ,zeros(N,1)];
+    Dy_imhat = imhat(2:end,:) - imhat(1:end-1,:);
+    Dy_imhat=[Dy_imhat ; zeros(1,N)];
 
-TVreconPhantom = imhat;
+    FIF=F*imhat*F;
+    FIF_vec=FIF(:);
+    minimize(norm(A.'*A*FIF_vec - y,2) + lambda * (norm(Dx_imhat(:),1) + norm(Dy_imhat(:),1)) );
+cvx_end
+%% 
+TVreconPhantom =imhat; % Inverse Fourier transform
 
 figure()
 subplot(1,3,1)
@@ -61,39 +90,39 @@ imshow(TVreconPhantom, [])
 title(sprintf('TV-domain reconstruction'))
 
 
-
-%% Question 20: IFFT vs TV-based MRI reconstruction
-
-% Brain data
-data = load('brain.mat');
-im = imresize(abs(data.im), [64,64]);
-
-% IFFT reconstruction
-y = ...;
-invReconstructionMRI = ...;
-
-% TV-based reconstruction
-lambda = 0.1;
-
-cvx_begin
-    cvx_precision low
-    variable imhat(N,N)
-    Dx_imhat =  ...;
-    Dy_imhat = ...;
-    minimize( ... );
-cvx_end
-TVreconMRI = imhat;
-
-% Plot the original image and the two reconstructions
-figure()
-subplot(1,3,1)
-imshow(im)
-title('Original image')
-subplot(1,3,2)
-imshow(invReconstructionMRI)
-title(sprintf('IFFT of zero-filled \nsubsampled k-space'))
-subplot(1,3,3)
-imshow(TVreconMRI)
-title('TV reconstruction')
-
-%}
+% 
+% %% Question 20: IFFT vs TV-based MRI reconstruction
+% 
+% % Brain data
+% data = load('brain.mat');
+% im = imresize(abs(data.im), [64,64]);
+% 
+% % IFFT reconstruction
+% y = ...;
+% invReconstructionMRI = ...;
+% 
+% % TV-based reconstruction
+% lambda = 0.1;
+% 
+% cvx_begin
+%     cvx_precision low
+%     variable imhat(N,N)
+%     Dx_imhat =  ...;
+%     Dy_imhat = ...;
+%     minimize( ... );
+% cvx_end
+% TVreconMRI = imhat;
+% 
+% % Plot the original image and the two reconstructions
+% figure()
+% subplot(1,3,1)
+% imshow(im)
+% title('Original image')
+% subplot(1,3,2)
+% imshow(invReconstructionMRI)
+% title(sprintf('IFFT of zero-filled \nsubsampled k-space'))
+% subplot(1,3,3)
+% imshow(TVreconMRI)
+% title('TV reconstruction')
+% 
+% 
