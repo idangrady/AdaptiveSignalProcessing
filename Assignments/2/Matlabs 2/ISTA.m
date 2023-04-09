@@ -7,18 +7,16 @@ x_hat_prev = 4*ifft(transpose(A)*A*X);
 x_hat_new = zeros(size(x_hat_prev));
 
 i=0;
-while (i==0 ||norm(x_hat_prev - x_hat_new,2) > eps)
-
+while (i==0 ||norm(x_hat_prev - x_hat_new) > eps)
+    x_hat_prev = x_hat_new;
     % Gradient update step
-   % grad = beta *ifft((transpose(A) * (A * fft(x_hat_prev) - A * X)));
-   % grad = beta * ifft(transpose(A) * (A * fft(x_hat_prev) - A * X));
-     grad = (beta* F' *(transpose(A))*(A*F*x_hat_prev - A*X));
-
+% Option 1
+    grad = (beta* F' *(transpose(A))*(A*F*x_hat_prev - A*X));
+% Option 2
+   % grad = (beta* length(X)*ifft((transpose(A))*(A*F*x_hat_prev - A*X)));
    % Soft-thresholding
     x_hat_new = soft_thresholding(x_hat_prev - grad, lambda);
-
     % Update x_hat_prev for next iteration
-    x_hat_prev = x_hat_new;
     i=i+1;
 end
 
