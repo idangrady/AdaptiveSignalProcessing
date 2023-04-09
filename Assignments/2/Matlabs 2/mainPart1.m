@@ -5,9 +5,9 @@ clc;
 %% Question 3 
 % Generate signal
 
-x = [[1:5]/5 zeros(1,128-5)];
+x = [(1:5)/5 zeros(1,128-5)];
 x = x(randperm(128));
-y = x + 0.05 *randn(128);
+y = x + 0.05 *randn(1,128);
 num_semp = 32;
 
 %{
@@ -50,21 +50,21 @@ stem(0:10,abs(x_thr),'filled');
 grid on
 title('Soft-thresholding complex values for lambda = 2')
 legend('x', 'soft\_thr(x)', 'Location', 'northwest')
-%{
+
 %% Question 6: Soft-thresholding on signal y
 
-lambdas = [0.01, 0.05, 0.1, 0.2]
+lambdas = [0.01, 0.05, 0.1, 0.2];
 for i = 1:length(lambdas)
     subplot(1,4,i)
     stem(x, 'filled');
     hold on
-    x_hat = ...;
+    x_hat = soft_thresholding(y,lambdas(i));
     stem(x_hat,'filled');
     legend('$y$', '$\hat{x}$','Interpreter','latex') %This latex syntax requires Matlab R2018b or newer.
     grid on;
     title(sprintf('Estimate of x for lambda = %.1d',lambdas(i)))
 end
-%}
+
 
 %% Question 9: Ma
 

@@ -38,11 +38,34 @@ addpath(genpath('C:\Users\yooso\course\cvx'));
 run('C:\Users\yooso\course\cvx\cvx_setup.m');
 %% Question 19: TV based reconstruction 
 N = 64; % x and y dimension of the image
-
+% F = ...;
+% 
+% lambda = 0.1;
+% 
+% cvx_begin
+%     cvx_precision low
+%     variable imhat(N,N)
+%     Dx_imhat = ...;
+%     Dy_imhat = ...;
+%     minimize( + lambda * (norm(Dx_imhat(:),1) + norm(Dy_imhat(:),1)) );
+% cvx_end
+% 
+% TVreconPhantom = imhat;
+% ttt=diff(im);
+% B = [ttt; zeros(1,64)];
+% CC=im(:,2:end) - im(:,1:end-1);
+% twt=diff(im,1,2);
+% subplot(1,2,1)
+% % 
+% imshow(twt)
+% subplot(1,2,2)
+% imshow(CC)
+%%
 F = dftmtx(N); % Create the DFT matrix
 
 lambda = 0.1;
-
+% FIF=F*im*F;
+% AAA=A.'*A*(F*im*F)(:);
 cvx_begin
     cvx_precision low
     variable imhat(N,N) 
